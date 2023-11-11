@@ -1,0 +1,9 @@
+{
+  "test": "test",
+  "partOfSpeech": ["noun", "verb", "adjective", "adverb", "pronoun", "conjunction", "preposition", "other"],
+  "alrihian": "Alrihian",
+  "latvian": "Latvian",
+  "description": "Description",
+  "speech": "Part of speech",
+  "examples": "Examples"
+}

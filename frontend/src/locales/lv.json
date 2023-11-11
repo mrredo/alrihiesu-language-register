@@ -1,0 +1,10 @@
+{
+  "test": "tests",
+  "partOfSpeech": ["Lietvārds", "Darbības vārds", "Īpašības vārds", "Apstāklis", "Vietniekvārds", "Savienojuma vārds", "Prievārds", "Cits"],
+  "alrihian": "Alrihiski",
+  "latvian": "Latviski",
+  "description": "Apraksts",
+  "speech": "Runas daļa",
+  "examples": "Piemēri"
+
+}

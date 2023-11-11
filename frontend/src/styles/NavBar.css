@@ -1,0 +1,12 @@
+
+.nav-item .dropdown-menu {
+    background: #000000d2 !important
+}
+  
+.nav-item .dropdown-item {
+    color: #ffffff !important
+}
+  
+.nav-item .dropdown-item:hover {
+    background: #464646 !important
+}

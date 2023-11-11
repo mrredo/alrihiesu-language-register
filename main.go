@@ -7,6 +7,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"main/api"
+	"main/config"
 	"os"
 )
 
@@ -19,10 +21,13 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	config.Server = r
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(os.Getenv("MONGO")).SetServerAPIOptions(serverAPI)
 	// Create a new client and connect to the server
 	client, err := mongo.Connect(context.TODO(), opts)
+	config.MongoClient = client
+
 	if err != nil {
 		panic(err)
 	}
@@ -31,5 +36,9 @@ func main() {
 			panic(err)
 		}
 	}()
-	r.Run(":4000")
+	config.WordDB = client.Database("word")
+	config.GramDB = client.Database("grammatical")
+	api.RegisterEndpoints()
+
+	r.Run("localhost:4000")
 }
