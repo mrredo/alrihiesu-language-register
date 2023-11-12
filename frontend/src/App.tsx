@@ -6,6 +6,7 @@ import Main from "./pages/Main"
 import './styles/darkswal.scss'
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import en from './locales/en.json';
 import lv from './locales/lv.json';

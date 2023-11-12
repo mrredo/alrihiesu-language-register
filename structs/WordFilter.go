@@ -13,6 +13,7 @@ import (
 type WordFilter struct {
 	SpecificWords []string      `json:"specific_words,omitempty"`
 	Order         AlphabetOrder `json:"order,omitempty"`
+	Page          int           `json:"page,omitempty"`
 	//Limit         int            `json:"limit,omitempty"`
 	WordsPerPage int            `json:"words_per_page,omitempty"`
 	PartOfSpeech []PartOfSpeech `json:"part_of_speech,omitempty"`

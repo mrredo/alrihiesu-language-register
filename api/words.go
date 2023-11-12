@@ -3,25 +3,19 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"main/structs"
-	"strconv"
 	"strings"
 )
 
 func GetWords(c *gin.Context) {
-	page := c.Query("p")
 	filter := &structs.WordFilter{}
 	if err := c.BindJSON(filter); err != nil {
 		c.JSON(400, Error("invalid json | err: "+err.Error()))
 		return
 	}
-	pageNum := 1
-	if page != "" {
-		i, err := strconv.Atoi(page)
-		if err == nil && i > 0 {
-			pageNum = i
-		}
+	if filter.Page <= 0 {
+		filter.Page = 1
 	}
-	list, err := filter.Exec(pageNum)
+	list, err := filter.Exec(filter.Page)
 	if err != nil {
 		c.JSON(400, Error("failed getting words | err: "+err.Error()))
 		return
