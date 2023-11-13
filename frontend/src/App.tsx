@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import en from './locales/en.json';
 import lv from './locales/lv.json';
+import MyComponent from "./pages/components/test";
 
 const resources = {
   en: { translation: en },
@@ -33,6 +34,7 @@ function App() {
     <BrowserRouter>
       <Routes>
           <Route path="/" element={<Main />} />
+          <Route path={"/test"} element={<MyComponent nameList={["word1", "word2", "word3"]}/> }/>
           {/*<Route path="*" element={<NotFound />} />*/}
 
         </Routes>

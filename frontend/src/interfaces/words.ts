@@ -23,9 +23,12 @@ interface Word {
     "partofspeech": string,
     "examples": string[]
 }
-
+type WordMap = {
+    [wordId: string]: Word
+};
 export {
     Word,
     WordFilter,
-    WordMetaData
+    WordMetaData,
+    WordMap
 }

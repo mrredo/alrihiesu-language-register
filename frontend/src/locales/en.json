@@ -5,5 +5,12 @@
   "latvian": "Latvian",
   "description": "Description",
   "speech": "Part of speech",
-  "examples": "Examples"
+  "examples": "Examples",
+  "navbar_title": "Alrihian language registry",
+  "navbar_words": "Words",
+  "navbar_gramatics": "Gramatics",
+  "search": "Search",
+  "advanced_filters": "Filters",
+  "submit": "Submit"
+
 }

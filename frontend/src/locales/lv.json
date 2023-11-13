@@ -5,6 +5,13 @@
   "latvian": "Latviski",
   "description": "Apraksts",
   "speech": "Runas daļa",
-  "examples": "Piemēri"
+  "examples": "Piemēri",
+  "navbar_title": "Alrihijas valodas reģistrs",
+  "navbar_words": "Vārdi",
+  "navbar_gramatics": "Gramatika",
+  "search": "Meklēt",
+  "advanced_filters": "Filtri",
+  "submit": "Iesniegt"
+
 
 }
