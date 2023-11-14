@@ -5,9 +5,10 @@ import { Pagination } from 'react-bootstrap';
 interface Props {
     data: WordMetaData;
     setFilter: (...args: any) => void;
+    setQuery: (...args: any) => void;
 }
 
-const CustomPagination: React.FC<Props> = ({ data, setFilter }) => {
+const CustomPagination: React.FC<Props> = ({ data, setFilter, setQuery }) => {
     const renderPageButtons = () => {
         const buttons = [];
 
@@ -70,6 +71,7 @@ const CustomPagination: React.FC<Props> = ({ data, setFilter }) => {
     };
 
     const handlePageChange = (page: number) => {
+        setQuery(true)
         setFilter((prevFilter: WordFilter) => ({
             ...prevFilter,
             page: page,

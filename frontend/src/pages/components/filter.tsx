@@ -5,6 +5,7 @@ import {useTranslation} from "react-i18next";
 interface Props {
     filter: WordFilter;
     setFilter: (...args: any) => void;
+    setQuery: (...args: any) => void;
 }
 
 let proxy = "http://localhost:4000";
@@ -12,9 +13,18 @@ let proxy = "http://localhost:4000";
 const FilterButtons = (props: Props) => {
     let InputPages = useRef<HTMLInputElement>(null);
     const { t } = useTranslation()
-
+    let ContainsRef = useRef<HTMLInputElement>(null)
+    let StartsWith = useRef<HTMLInputElement>(null)
+    let EndsWith = useRef<HTMLInputElement>(null)
     function GetNewResults() {
-        // Fetch results using setFilter
+        props.setQuery(true)
+        props.setFilter((prev: WordFilter) => ({
+            ...prev,
+            contains: ContainsRef.current?.value,
+            ends_with: EndsWith.current?.value,
+            starts_with: StartsWith.current?.value
+
+        }))
     }
 
     useEffect(() => {
@@ -42,9 +52,13 @@ const FilterButtons = (props: Props) => {
                 <input
                     defaultValue={props.filter.contains}
                     id="latvian-input"
+                    ref={ContainsRef}
+                    onKeyDown={event => event.key === "enter"? GetNewResults() : null}
                     className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300"
                 />
-                <button className={"p-2 mx-2 border-2 rounded-md transition-all hover:rounded-lg font-bold hover:bg-[#00ff3c] hover:text-black duration-300"}>{t('submit')}</button>
+                <button
+                    onClick={() => GetNewResults()}
+                    className={"p-2 mx-2 border-2 rounded-md transition-all hover:rounded-lg font-bold hover:bg-[#00ff3c] hover:text-black duration-300"}>{t('submit')}</button>
             </div>
             <details>
                 <summary>{t('advanced_filters')}</summary>
@@ -54,6 +68,7 @@ const FilterButtons = (props: Props) => {
 
                         <input
                             defaultValue={props.filter.starts_with}
+                            ref={StartsWith}
                             id="latvian-input"
                             className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300"
                         />
@@ -61,6 +76,7 @@ const FilterButtons = (props: Props) => {
                     <div>
                         <span className={"w-[5rem]"}>Ends with:</span>
                         <input
+                            ref={EndsWith}
                             defaultValue={props.filter.starts_with}
                             id="latvian-input"
                             className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300"

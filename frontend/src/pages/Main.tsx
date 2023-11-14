@@ -16,9 +16,8 @@ export default function Main() {
     const navigate = useNavigate();
     const { t } = useTranslation()
     let [options, setOptions] = useState([])
-    let [firstFetch, setFetch] = useState(true)
-    const [value, setValue] = useState('word1');
     let [inputData, setInputData]= useState({} as WordMap)
+    let [tempFilter, setTempFilter] = useState<WordFilter>({})
     let [filter, setFilter] = useState<WordFilter>({
         words_per_page: 5,
         specific_words: [],
@@ -38,55 +37,60 @@ export default function Main() {
         "data": []
     } as WordMetaData)
     useEffect(() => {
-        if (queriesLoaded) {
-            // const value = new URLSearchParams(locati
-            fetchWords(filter, setWords);
+        if(queriesLoaded) {
+            const queryParams = new URLSearchParams({
+                words_per_page: String(filter.words_per_page),
+                specific_words: String(filter.part_of_speech?.join(",")),
+                page: String(filter.page),
+                order: String(filter.order),
+                part_of_speech: String(filter.part_of_speech?.join(",")),
+                starts_with: filter.starts_with,
+                ends_with: filter.ends_with,
+                contains: filter.contains
 
-        } else {
-
+            } as Record<string, string>).toString();
+            navigate("/?" + queryParams.toString())
+            location.reload()
         }
-    }, [filter]);
-    useEffect(() => {
 
-    }, [filter.page]);
+
+    }, [filter]);
 
     useEffect(() => {
         setOptions(t('partOfSpeech', {returnObjects:true}) as any)
 
 
-        const parseQueryParam = (key: string) => {
-            const value = new URLSearchParams(location.search).get(key);
-            console.log(key, value)
-            // Parse number values, falling back to string if parsing fails
-            return key !== 'specific_words' && key !== 'part_of_speech'
-                ? parseInt(value || (filter as any)[key].toString(), 10)
-                : value !== null
-                    ? value
-                    : filter[key];
+
+        const q = new URLSearchParams(location.search)
+        // Build a new filter object with values from query parameters
+        const newFilter: WordFilter = {
+            words_per_page: q.get("words_per_page") !== ""? parseInt(q.get("words_per_page") || "30") : 30,
+            specific_words:  q.get("specific_words") !== ""?  q.get("specific_words")?.split(",") as string[]: [],
+            page: q.get("page") !== ""? parseInt(q.get("page") || "1") : 1,
+            order: q.get("order") !== ""? parseInt(q.get("order") || "0") : 0,
+            part_of_speech: q.get("part_of_speech") !== ""?  q.get("part_of_speech")?.split(",") as string[]: [],
+            starts_with: q.get("starts_with") as string,
+            ends_with: q.get("ends_with") as string,
+            contains: q.get("contains")  as string
         };
 
-        // Build a new filter object with values from query parameters
-        const newFilter: WordFilter = {} as WordFilter;
-        // Iterate over the keys of WordFilter and parse query parameters dynamically
-        for (const key in filter) {
-            if (Object.prototype.hasOwnProperty.call(filter, key)) {
-                if (key === 'specific_words' || key === 'part_of_speech') {
-                    newFilter[key] = (parseQueryParam(key) as string).split(',').filter(Boolean);
-                } else {
-
-                    (newFilter as any)[key] = parseQueryParam(key);
-                }
-            }
-        }
+        // // Iterate over the keys of WordFilter and parse query parameters dynamically
+        // for (const key in filter) {
+        //     if (Object.prototype.hasOwnProperty.call(filter, key)) {
+        //         if (key === 'specific_words' || key === 'part_of_speech') {
+        //             newFilter[key] = (parseQueryParam(key) as string).split(',').filter(Boolean);
+        //         } else {
+        //
+        //             (newFilter as any)[key] = parseQueryParam(key);
+        //         }
+        //     }
+        // }
         filter = newFilter
 
 
         // Update the filter state
-        setQueriesLoaded(true)
         setFilter(newFilter);
-
-        // setFilter(filter)
-        // fetchWords(filter, setWords)
+        fetchWords(filter, setWords)
 
     }, [])
 
@@ -106,7 +110,7 @@ export default function Main() {
                     {/*{t('test')}*/}
                     <button className={"p-2 border-2 m-3 rounded-lg text-white"} onClick={() => changeLanguage('lv')}>Latvian</button>
                     <button className={"p-2 border-2 m-3 rounded-lg text-white"} onClick={() => changeLanguage('en')}>English</button>
-                    <FilterButtons filter={filter} setFilter={setFilter} ></FilterButtons>
+                    <FilterButtons setQuery={setQueriesLoaded} filter={filter} setFilter={setFilter} ></FilterButtons>
 
 
                     <div className={"grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1"}>
@@ -159,7 +163,7 @@ export default function Main() {
                     </div>
                     {/*<WordsElement words={words.data}></WordsElement>*/}
                     <div className={"flex justify-center h-full relative sticky bottom-0"}>
-                        <CustomPagination setFilter={setFilter} data={words} ></CustomPagination>
+                        <CustomPagination setQuery={setQueriesLoaded} setFilter={setFilter} data={words} ></CustomPagination>
                     </div>
 
 
@@ -185,4 +189,7 @@ const fetchWords = (filters: WordFilter, setData: (...args: any) => void) => {
 
         setData(data)
     })).catch(err => console.error)
+}
+function FilterToQuery() {
+
 }
