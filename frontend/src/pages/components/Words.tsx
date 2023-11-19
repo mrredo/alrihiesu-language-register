@@ -20,7 +20,7 @@ const WordsElement: React.FC<Props> = ({words}) => {
     function LoadWords() {
         let list = []
         for (const word of words) {
-            wordMap.set(word.id, word)
+            wordMap.set(word.id as string, word)
             list.push((
                 <details id={`${word.id}`} className={"flex flex-col border-2 rounded-lg m-3 p-2 text-white"}>
                     <summary>{word.alrihian}-{word.latvian}</summary>
@@ -28,7 +28,7 @@ const WordsElement: React.FC<Props> = ({words}) => {
                     <div className="flex items-center">
                         <span className="w-[7rem]">{t('alrihian')}:</span>
                         <input
-                            onChange={(event) => handleInputChange(word.id, "alrihian", event)}
+                            onChange={(event) => handleInputChange(word.id as string, "alrihian", event)}
                             value={word.alrihian} id={`${word.id}-alrihian`} className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
                     </div>
                     <div className="flex items-center">
@@ -74,7 +74,7 @@ const WordsElement: React.FC<Props> = ({words}) => {
     }
     useEffect(() => {
         for (const word of words) {
-            wordMap.set(word.id, word)
+            wordMap.set(word.id as string, word)
         }
         setWordMap(wordMap)
     }, [words])

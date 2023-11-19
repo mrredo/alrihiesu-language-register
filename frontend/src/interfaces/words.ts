@@ -16,13 +16,15 @@ interface WordMetaData {
     data: Word[]
 }
 interface Word {
-    id: string,
+    id?: string,
     alrihian: string,
     latvian: string,
     description: string,
     partofspeech: string,
     examples: string[]
 }
+const options1 = ["noun", "verb", "adjective", "adverb", "pronoun", "conjunction", "preposition", "other"]
+
 type WordMap = {
     [wordId: string]: Word
 };
@@ -30,5 +32,6 @@ export {
     Word,
     WordFilter,
     WordMetaData,
-    WordMap
+    WordMap,
+    options1
 }

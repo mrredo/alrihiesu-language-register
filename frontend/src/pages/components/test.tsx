@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 interface MyComponentProps {
     nameList: string[];
@@ -44,13 +44,25 @@ const MyComponent: React.FC<MyComponentProps> = ({ nameList }) => {
     const [selectedMap, setSelectedMap] = useState<Map>(map1);
     const [inputValues, setInputValues] = useState<string[]>(nameList);
 
-    const handleInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValues = [...inputValues];
-        newValues[index] = event.target.value;
-        setInputValues(newValues);
+    const handleInputChange = (id: string, event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValues = [...inputValues]; // Assuming inputValues is defined elsewhere
+
+        // Create a copy of the value object using spread syntax
+        const updatedValue = { ...selectedMap[id] };
+        updatedValue.name = event.target?.value;
+
+        // Update the selectedMap state using the functional form of setState
+        setSelectedMap(prevState => ({
+            ...prevState,
+            [id]: updatedValue // Use computed property names to update the specific key
+        }));
     };
 
+    useEffect(() => {
+        console.log(selectedMap["1"])
+    }, [selectedMap])
     const switchMap = (newMap: Map) => {
+        console.log(selectedMap)
         setSelectedMap(newMap);
         setInputValues(Object.values(newMap).map((word) => word.name));
     };
@@ -63,13 +75,13 @@ const MyComponent: React.FC<MyComponentProps> = ({ nameList }) => {
             </button>
 
             {/* Dynamically render input fields based on the selected map */}
-            {Object.values(selectedMap).map((word, index) => (
+            {Object.keys(selectedMap).map((word, index) => (
                 <input
-                    key={index}
+                    key={word}
                     type="text"
-                    value={inputValues[index]}
+                    value={selectedMap[word].name}
                     placeholder={`Enter name ${index + 1}`}
-                    onChange={(event) => handleInputChange(index, event)}
+                    onChange={(event) => handleInputChange(word, event)}
                 />
             ))}
         </div>

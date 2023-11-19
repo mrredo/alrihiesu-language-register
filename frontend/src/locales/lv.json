@@ -6,12 +6,27 @@
   "description": "Apraksts",
   "speech": "Runas daļa",
   "examples": "Piemēri",
-  "navbar_title": "Alrihijas valodas reģistrs",
+  "navbar_title": "Alrihas valodas reģistrs",
   "navbar_words": "Vārdi",
   "navbar_gramatics": "Gramatika",
   "search": "Meklēt",
   "advanced_filters": "Filtri",
-  "submit": "Iesniegt"
+  "submit": "Iesniegt",
+  "starts_with": "Sākas ar",
+  "ends_with": "Beidzas ar",
+  "order_none": "Neviena",
+  "order": "Kārtība",
+  "disabled": "Invalīda",
+  "words_per_page": "Vārdi lapā",
+  "delete_word": "Vai tu gribi dzēst šo {{word}}?",
+  "delete": "Dzēst",
+  "cancel": "Atcelt",
+  "confirm": "Apstiprināt",
+  "new_word": "Jauns vārds",
+  "failed_new_word": "Neizdevās izveidot jaunu vārdu",
+  "message_from_server": "Ziņa no servera"
+
+
 
 
 }

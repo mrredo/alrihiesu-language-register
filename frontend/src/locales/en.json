@@ -1,16 +1,32 @@
 {
   "test": "test",
   "partOfSpeech": ["noun", "verb", "adjective", "adverb", "pronoun", "conjunction", "preposition", "other"],
-  "alrihian": "Alrihian",
+  "alrihian": "Alrihan",
   "latvian": "Latvian",
   "description": "Description",
   "speech": "Part of speech",
   "examples": "Examples",
-  "navbar_title": "Alrihian language registry",
+  "navbar_title": "Alrihan language registry",
   "navbar_words": "Words",
   "navbar_gramatics": "Gramatics",
   "search": "Search",
   "advanced_filters": "Filters",
-  "submit": "Submit"
+  "submit": "Submit",
+  "starts_with": "Starts with",
+  "ends_with": "Ends with",
+  "order_none": "None",
+  "order": "Order",
+  "disabled": "Disabled",
+  "words_per_page": "Words per page",
+  "delete_word": "Do you want to delete {{word}}?",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "new_word": "New word",
+  "failed_new_word": "Failed creating a new word",
+  "message_from_server": "Message from server"
+
+
+
 
 }
