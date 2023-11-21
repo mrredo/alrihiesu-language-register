@@ -40,7 +40,7 @@ func Login(c *gin.Context) {
 		c.JSON(400, functions.Error("failed_saving_session"))
 		return
 	}
-	c.JSON(200, *acc)
+	c.JSON(200, acc.Get())
 
 }
 func Logout(c *gin.Context) {

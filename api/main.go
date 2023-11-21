@@ -27,12 +27,7 @@ func RegisterEndpoints() {
 	api := r.Group("/api/")
 	authGr := r.Group("/auth/")
 	api.Use(func(c *gin.Context) {
-		/*
 
-			REMOVE c.Next() when need authentication
-
-		*/
-		c.Next()
 		session := sessions.Default(c)
 		if session.Get("user") == nil && (c.Request.Method != "GET" && c.Request.Method != "PUT" && c.Request.Method != "NEWGET") {
 			c.JSON(401, functions.Error("not_authenticated"))

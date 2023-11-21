@@ -19,8 +19,7 @@ func CreateAccount(c *gin.Context) {
 		c.JSON(400, functions.Error(err.Error()))
 		return
 	}
-	acc.RemovePasswordField()
-	c.JSON(200, *acc)
+	c.JSON(200, acc.Get())
 }
 func GetAccount(c *gin.Context) {
 	name := c.Query("name")

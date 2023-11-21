@@ -16,14 +16,14 @@ const CustomPagination: React.FC<Props> = ({ data, setFilter, setQuery }) => {
             <Pagination.First
                 key="first"
                 onClick={() => handlePageChange(1)}
-                disabled={data.current_page === 1}
+                disabled={data.current_page === 1 || data.page_count === 0}
             />
         );
         buttons.push(
             <Pagination.Prev
                 key="prev"
                 onClick={() => handlePageChange(data.current_page - 1)}
-                disabled={data.current_page === 1}
+                disabled={data.current_page === 1|| data.page_count === 0}
             />
         );
 
@@ -54,7 +54,7 @@ const CustomPagination: React.FC<Props> = ({ data, setFilter, setQuery }) => {
             <Pagination.Next
                 key="next"
                 onClick={() => handlePageChange(data.current_page + 1)}
-                disabled={data.current_page === data.page_count}
+                disabled={data.current_page === data.page_count|| data.page_count === 0}
             />
         );
 
@@ -62,7 +62,7 @@ const CustomPagination: React.FC<Props> = ({ data, setFilter, setQuery }) => {
             <Pagination.Last
                 key="last"
                 onClick={() => handlePageChange(data.page_count)}
-                disabled={data.current_page === data.page_count}
+                disabled={data.current_page === data.page_count|| data.page_count === 0}
             />
         );
 

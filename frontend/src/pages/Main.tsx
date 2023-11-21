@@ -12,14 +12,18 @@ import WordsElement from "./components/Words";
 import {Button} from "react-bootstrap";
 import {Trash, ArrowClockwise} from "react-bootstrap-icons"
 const options1 = ["noun", "verb", "adjective", "adverb", "pronoun", "conjunction", "preposition", "other"]
-import Swal1 from 'sweetalert2'
+
 import withReactContent from 'sweetalert2-react-content'
+import {Account} from "../interfaces/user";
+import Swal1 from 'sweetalert2'
 let Swal = withReactContent(Swal1)
 
 let proxy = "http://localhost:4000"
 export default function Main() {
     const navigate = useNavigate();
     const { t } = useTranslation()
+    let [account, setAccount] = useState({} as Account)
+    let [logged, setLogged] = useState(false)
     let [options, setOptions] = useState([])
     let [inputData, setInputData]= useState({} as WordMap)
     let [tempFilter, setTempFilter] = useState<WordFilter>({})
@@ -240,14 +244,16 @@ export default function Main() {
     return (
         <>
             <div className={" sticky top-0"}>
-                <NavBar currentLang={i18n.language} setlanguage={changeLanguage}/>
+                <NavBar logged={logged} setLogged={setLogged} account={account} setAccount={setAccount} currentLang={i18n.language} setlanguage={changeLanguage}/>
 
             </div>
             <FilterButtons options={options} setQuery={setQueriesLoaded} filter={filter} setFilter={setFilter} ></FilterButtons>
-            <div className={"flex justify-center "}>
-                <Button onClick={() => CreateWord()} variant={"success"}>{t('new_word')}</Button>
+            {logged? (
+                <div className={"flex justify-center "}>
+                    <Button onClick={() => CreateWord()} variant={"success"}>{t('new_word')}</Button>
+                </div>
+            ) : ""}
 
-            </div>
 
             {words.data.length !== 0? (
                 <>
@@ -262,28 +268,32 @@ export default function Main() {
                             <details id={`${word.id}`} className={"flex flex-col border-2 rounded-lg m-3 p-2 text-white"}>
                                 <summary className="flex justify-between items-center mx-1">
                                     <span id={`${word.id}-title`}>{word.alrihian}-{word.latvian}</span>
-                                    <div>
-                                        <Button className="mx-2 px-3 py-2" onClick={() => UpdateWord(word, i)} variant="outline-warning">
-                                            <ArrowClockwise />
-                                        </Button>
-                                        <Button className="mx-2 px-3 py-2" onClick={() => DeleteWord(word, i)} variant="outline-danger">
-                                            <Trash />
-                                        </Button>
+                                    {logged? (
+                                        <div>
+                                            <Button className="mx-2 px-3 py-2" onClick={() => UpdateWord(word, i)} variant="outline-warning">
+                                                <ArrowClockwise />
+                                            </Button>
+                                            <Button className="mx-2 px-3 py-2" onClick={() => DeleteWord(word, i)} variant="outline-danger">
+                                                <Trash />
+                                            </Button>
 
-                                    </div>
+                                        </div>
+                                    ) : ""}
+
                                 </summary>
                                 {/*<div id={word.id} className="flex flex-col border-2 rounded-lg m-3 p-2 text-white">*/}
                                     <div className="flex items-center mt-1">
                                         <span className="w-[7rem]">{t('alrihian')}:</span>
-                                        <input defaultValue={word.alrihian} id={`${word.id}-alrihian`} className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
+                                        <input disabled={!logged} defaultValue={word.alrihian} id={`${word.id}-alrihian`} className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
                                     </div>
                                     <div className="flex items-center">
                                         <span className="w-[7rem]">{t('latvian')}:</span>
-                                        <input defaultValue={word.latvian} id={`${word.id}-latvian`} className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
+                                        <input disabled={!logged} defaultValue={word.latvian} id={`${word.id}-latvian`} className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
                                     </div>
                                     <div className="flex items-center">
                                         <span className="w-[7rem]">{t('description')}:</span>
                                         <textarea
+                                            disabled={!logged}
                                             defaultValue={word.description}
                                             id={`${word.id}-description`}
                                             rows={2}
@@ -292,7 +302,9 @@ export default function Main() {
                                     </div>
                                     <div className="flex items-center">
                                         <span className="w-[7rem]">{t('speech')}:</span>
-                                        <select defaultValue={word.partofspeech} id={`${word.id}-speech`} className="p-2 bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300">
+                                        <select
+                                            disabled={!logged}
+                                            defaultValue={word.partofspeech} id={`${word.id}-speech`} className="p-2 bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300">
                                             {options.map((option, i) => (
                                                 <option value={options1[i]}>{option}</option>
                                             ))}
@@ -302,6 +314,7 @@ export default function Main() {
                                         <details>
                                             <summary>{t('examples')}</summary>
                                             <textarea
+                                                disabled={!logged}
                                                 defaultValue={word.examples.join("\n")}
                                                 id={`${word.id}-examples`}
                                                 className="p-2 min-w-[25vw] max-w-[30vw] md:min-w-[40vw] md:max-w-[45vw] sm:min-w-[70vw] sm:max-w-[85vw] resize h-[4rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300"

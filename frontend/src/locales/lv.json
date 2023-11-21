@@ -24,9 +24,14 @@
   "confirm": "Apstiprināt",
   "new_word": "Jauns vārds",
   "failed_new_word": "Neizdevās izveidot jaunu vārdu",
-  "message_from_server": "Ziņa no servera"
-
-
+  "message_from_server": "Ziņa no servera",
+  "login": "Pierakstīties",
+  "logout": "Izrakstīties",
+  "name": "Vārds",
+  "password": "Parole",
+  "enter_name": "Rakstiet vārdu...",
+  "enter_password": "Rakstiet paroli...",
+  "error": "Kļūme"
 
 
 }

@@ -24,7 +24,14 @@
   "confirm": "Confirm",
   "new_word": "New word",
   "failed_new_word": "Failed creating a new word",
-  "message_from_server": "Message from server"
+  "message_from_server": "Message from server",
+  "login": "Login",
+  "logout": "Logout",
+  "name": "Name",
+  "password": "Password",
+  "enter_name": "Enter name...",
+  "enter_password": "Enter password...",
+  "error": "Error"
 
 
 

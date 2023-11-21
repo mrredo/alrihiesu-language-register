@@ -48,6 +48,9 @@ var (
 	ErrUserNotFound      = errors.New("user_not_found")
 )
 
+/*
+Session data for backend
+*/
 var AccountData = map[string]Account{}
 
 // RetrieveAccountData
@@ -108,6 +111,11 @@ func CreateAccount(name, pass, adminKey string) (*Account, error) {
 //		if config.ValidAdminKey(key) || mainAcc.IsAdmin() {
 //		}
 //	}
+func (acc *Account) Get() Account {
+	newacc := *acc
+	newacc.RemovePasswordField()
+	return newacc
+}
 func (acc *Account) NameToLower() string {
 	return strings.ToLower(acc.Name)
 }
