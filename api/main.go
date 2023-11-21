@@ -2,11 +2,19 @@ package api
 
 import (
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-gonic/gin"
+	"main/api/accounts"
+	"main/api/auth"
 	"main/config"
+	"main/functions"
 )
 
 func RegisterEndpoints() {
 	r := config.Server
+	store := cookie.NewStore([]byte("secret"))
+	r.Use(sessions.Sessions("user", store))
 	r.Use(cors.New(cors.Config{
 		AllowWildcard:          true,
 		AllowWebSockets:        true,
@@ -17,9 +25,38 @@ func RegisterEndpoints() {
 		AllowCredentials:       true,
 	}))
 	api := r.Group("/api/")
+	authGr := r.Group("/auth/")
+	api.Use(func(c *gin.Context) {
+		/*
+
+			REMOVE c.Next() when need authentication
+
+		*/
+		c.Next()
+		session := sessions.Default(c)
+		if session.Get("user") == nil && (c.Request.Method != "GET" && c.Request.Method != "PUT" && c.Request.Method != "NEWGET") {
+			c.JSON(401, functions.Error("not_authenticated"))
+			c.Abort()
+		}
+	})
+
+	// AUTHENTICATION
+	authGr.POST("/logout", auth.Logout)
+
+	authGr.POST("/login", auth.Login)
+	authGr.GET("/account", auth.GetOwnAccount)
+
+	// API
+	// - WORDS
 	api.PUT("/word", GetWords)
+	api.Handle("NEWGET", "/word", GetWords)
+
 	api.GET("/word", GetWords)
 	api.POST("/word", MakeNewWord)
 	api.DELETE("/word", DeleteWord)
 	api.PATCH("/word", UpdateWord)
+
+	// - ACCOUNT
+	api.GET("/account", accounts.GetAccount)
+	api.POST("/account", accounts.CreateAccount)
 }
