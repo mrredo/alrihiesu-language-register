@@ -7,7 +7,6 @@ import (
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 	"main/api"
 	"main/config"
 	"main/structs"
@@ -27,9 +26,9 @@ func main() {
 	gob.Register(map[string]any{})
 	gob.Register(structs.Account{})
 	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	//if err != nil {
+	//	log.Fatal("Error loading .env file")
+	//}
 	config.Server = r
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(os.Getenv("MONGO")).SetServerAPIOptions(serverAPI)
