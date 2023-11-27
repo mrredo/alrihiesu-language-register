@@ -59,7 +59,7 @@ export default function Main() {
 
             } as Record<string, string>);
             console.log(queryParams.get("part_of_speech"))
-            navigate("/?" + queryParams.toString())
+            navigate("?" + queryParams.toString())
             location.reload()
         }
 
@@ -245,7 +245,6 @@ export default function Main() {
         <>
             <div className={" sticky top-0"}>
                 <NavBar logged={logged} setLogged={setLogged} account={account} setAccount={setAccount} currentLang={i18n.language} setlanguage={changeLanguage}/>
-
             </div>
             <FilterButtons options={options} setQuery={setQueriesLoaded} filter={filter} setFilter={setFilter} ></FilterButtons>
             {logged? (

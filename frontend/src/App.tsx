@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import en from './locales/en.json';
 import lv from './locales/lv.json';
 import MyComponent from "./pages/components/test";
+import NewMain from "./pages/NewMain";
 
 const resources = {
   en: { translation: en },
@@ -33,7 +34,8 @@ function App() {
   <ParallaxProvider>
     <BrowserRouter>
       <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path={"/"} element={<NewMain/>}/>
+          <Route path="/words" element={<Main />} />
           <Route path={"/test"} element={<MyComponent nameList={["word1", "word2", "word3"]}/> }/>
           {/*<Route path="*" element={<NotFound />} />*/}
 

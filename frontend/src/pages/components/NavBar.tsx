@@ -5,10 +5,11 @@ import {Account} from "../../interfaces/user";
 import config from "../../config";
 import Swal1 from 'sweetalert2'
 import withReactContent from "sweetalert2-react-content";
+import {i18n} from "../../App";
 let Swal = withReactContent(Swal1)
 interface Props {
-    setlanguage: (lng: any) => void
-    currentLang: string
+    setlanguage?: (lng: any) => void
+    currentLang?: string
     account: Account
     setAccount: (data: any) => void
     logged: boolean
@@ -20,8 +21,8 @@ const langtext = {
     "lv": "Latvian"
 }
 const NavBar: React.FC<Props> = ({ setlanguage, currentLang, account, setAccount, logged, setLogged}) => {
-    let lang = langtext[currentLang as ("en" | "lv")]
     const { t } = useTranslation()
+
     useEffect(() => {
         fetch(config.proxy + "/auth/account", {
             credentials: "include"
@@ -32,6 +33,9 @@ const NavBar: React.FC<Props> = ({ setlanguage, currentLang, account, setAccount
             }
         })
     }, [])
+    const changeLanguage = (lang: string) => {
+        i18n.changeLanguage(lang)
+    }
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
 
@@ -77,17 +81,19 @@ const NavBar: React.FC<Props> = ({ setlanguage, currentLang, account, setAccount
         })
     }
     return (
-        <Navbar expand="lg" className=" bg-body-tertiary">
+        <Navbar expand="lg" className={`bg-body-tertiary`}>
             <Container>
-                <Navbar.Brand href="#home">{t("navbar_title")}</Navbar.Brand>
+                <Navbar.Brand href="/">{t("navbar_title")}</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link disabled  href="/words">{t("navbar_words")}</Nav.Link>
+                        <Nav.Link href="/words">{t("navbar_words")}</Nav.Link>
                         <Nav.Link disabled href="/gramatics">{t("navbar_gramatics")}</Nav.Link>
-                        <NavDropdown title={`Language-${lang}`} id="basic-nav-dropdown">
-                            <NavDropdown.Item onClick={() => setlanguage('en')}>English</NavDropdown.Item>
-                            <NavDropdown.Item onClick={() => setlanguage('lv')}>Latvian</NavDropdown.Item>
+                        <Nav.Link disabled href="/games">{t("navbar_games")}</Nav.Link>
+
+                        <NavDropdown title={`Language-${t(i18n.language)}`} id="basic-nav-dropdown">
+                            <NavDropdown.Item onClick={() => setlanguage != null? setlanguage("en") : changeLanguage("en")}>English</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => setlanguage != null? setlanguage("lv") : changeLanguage("lv")}>Latvian</NavDropdown.Item>
                         </NavDropdown>
                         {!logged? (
                             <Nav.Item className={"flex justify-center"}>

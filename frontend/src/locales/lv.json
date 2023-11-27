@@ -31,7 +31,9 @@
   "password": "Parole",
   "enter_name": "Rakstiet vārdu...",
   "enter_password": "Rakstiet paroli...",
-  "error": "Kļūme"
-
+  "error": "Kļūme",
+  "en": "English(Angliski)",
+  "lv": "Latvian(Latviski)",
+  "navbar_games": "Spēļu noteikumi"
 
 }
