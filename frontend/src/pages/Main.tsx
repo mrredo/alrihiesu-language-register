@@ -126,6 +126,7 @@ export default function Main() {
         }
         fetch(proxy + "/api/word", {
             method: "PATCH",
+            credentials: "include",
             body: JSON.stringify(word)
         }).then(res => {
             if(res.ok) {
@@ -223,6 +224,7 @@ export default function Main() {
             if(res.isDenied) {
                 fetch(proxy + "/api/word", {
                     method: "DELETE",
+                    credentials: "include",
                     body: JSON.stringify({
                         id: word.id
                     })
