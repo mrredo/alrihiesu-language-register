@@ -49,5 +49,5 @@ func main() {
 	config.GramDB = client.Database("grammatical")
 	api.RegisterEndpoints()
 
-	r.Run("localhost:4000")
+	r.Run("localhost:4020")
 }

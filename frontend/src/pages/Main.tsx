@@ -16,9 +16,9 @@ const options1 = ["noun", "verb", "adjective", "adverb", "pronoun", "conjunction
 import withReactContent from 'sweetalert2-react-content'
 import {Account} from "../interfaces/user";
 import Swal1 from 'sweetalert2'
+import config from "../config";
 let Swal = withReactContent(Swal1)
 
-let proxy = "http://localhost:4000"
 export default function Main() {
     const navigate = useNavigate();
     const { t } = useTranslation()
@@ -124,7 +124,7 @@ export default function Main() {
             partofspeech: PartOfSpeech.value? PartOfSpeech.value : "",
             examples: Examples.value.split("\n")
         }
-        fetch(proxy + "/api/word", {
+        fetch(config.proxy + "/api/word", {
             method: "PATCH",
             credentials: "include",
             body: JSON.stringify(word)
@@ -194,7 +194,7 @@ export default function Main() {
                 partofspeech: speech.value ? speech.value : "",
                 examples: examples.value.split("\n")
             }
-            fetch(proxy+ "/api/word", {
+            fetch(config.proxy+"/api/word", {
                 method: "POST",
                 body: JSON.stringify(newWord)
             }).then(res => {
@@ -222,7 +222,7 @@ export default function Main() {
             denyButtonText: t('delete')
         }).then(res => {
             if(res.isDenied) {
-                fetch(proxy + "/api/word", {
+                fetch(config.proxy + "/api/word", {
                     method: "DELETE",
                     credentials: "include",
                     body: JSON.stringify({
@@ -344,8 +344,8 @@ export default function Main() {
 }
 const fetchWords = (filters: WordFilter, setData: (...args: any) => void) => {
     console.log("fetch: ", filters.page)
-    fetch(`${proxy}/api/word`, {
-        method: "PUT",
+    fetch(`${config.proxy}/api/word`, {
+        method: "NEWGET",
         credentials: "include",
         body: JSON.stringify(filters),
         headers: {

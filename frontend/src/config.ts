@@ -1,5 +1,5 @@
 
 const config = {
-    proxy: "http://localhost:4000"
+    proxy: ""
 }
 export default config
