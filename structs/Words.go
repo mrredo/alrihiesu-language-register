@@ -18,8 +18,15 @@ type Word struct {
 	Description  string       `json:"description,omitempty"`  // A description or additional information about the word
 	PartOfSpeech PartOfSpeech `json:"partofspeech,omitempty"` // The part of speech of the word (e.g., noun, verb, adjective)
 	Examples     []string     `json:"examples,omitempty"`     // Example sentences using the word
+	Author       Author       `json:"author"`
+	Contributors []Author     `json:"contributors"`
 }
 type PartOfSpeech string
+
+type Author struct {
+	ID         Snowflake
+	ModifiedAt int64
+}
 
 const (
 	Noun        PartOfSpeech = "noun"        // Latvian: "Lietvārds"

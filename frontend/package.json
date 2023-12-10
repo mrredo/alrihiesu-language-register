@@ -1,8 +1,8 @@
 {
-  "name": "alrihija-language",
+  "name": "alriha-language",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:4000",
+  "proxy": "http://localhost:4020",
   "dependencies": {
     "@react-spring/parallax": "^9.7.2",
     "@sweetalert2/theme-dark": "^5.0.15",

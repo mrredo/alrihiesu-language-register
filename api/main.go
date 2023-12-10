@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -13,17 +14,37 @@ import (
 
 func RegisterEndpoints() {
 	r := config.Server
-	store := cookie.NewStore([]byte("secret"))
-	r.Use(sessions.Sessions("user", store))
+	r.Use(func(c *gin.Context) {
+		fmt.Println(c.Request.Header.Get("Origin"))
+		c.Next()
+	})
 	r.Use(cors.New(cors.Config{
 		AllowWildcard:          true,
 		AllowWebSockets:        true,
 		AllowBrowserExtensions: true,
-		AllowOrigins:           []string{"http://localhost:4000", "http://localhost:3000", "http://127.0.0.1:3000", "http://127.0.0.1:4000", "https://127.0.0.1:443", "http://127.0.0.1:80", "http://192.168.8.114:4000", "https://redobot-golang-1.mrredogaming.repl.co"},
-		AllowMethods:           []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "NEWGET"},
-		AllowHeaders:           []string{"Origin", "Content-Length", "Content-Type", "Accept", "Cookie", "Set-Cookie"},
-		AllowCredentials:       true,
+		AllowOrigins: []string{
+			"http://localhost:3000/",
+			"http://localhost:4020/",
+			"http://localhost:3000",
+			"http://localhost:4020",
+			"https://127.0.0.1:443/",
+			"http://127.0.0.1:80/",
+			"https://127.0.0.1:443",
+			"http://127.0.0.1:80",
+			"http://alriha.xyz/",
+			"https://alriha.xyz/",
+			"http://alriha.xyz",
+			"https://alriha.xyz",
+			"https://alrihiesu-language-register-1.mrredogaming.repl.co/",
+			"https://alrihiesu-language-register-1.mrredogaming.repl.co",
+		},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "NEWGET"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Accept", "Cookie", "Set-Cookie"},
+		AllowCredentials: true,
 	}))
+	store := cookie.NewStore([]byte("secret"))
+	r.Use(sessions.Sessions("user", store))
+
 	api := r.Group("/api/")
 	authGr := r.Group("/auth/")
 	api.Use(func(c *gin.Context) {

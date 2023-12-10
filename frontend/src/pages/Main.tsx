@@ -144,26 +144,26 @@ export default function Main() {
             confirmButtonText: t('confirm'),
             html: <>
                 <div className="flex items-center mt-1">
-                    <span className="text-[#EBEBE4] w-[7rem]">{t('alrihian')}:</span>
+                    <span className="text-[#EBEBE4] w-[7rem]">{t('alrihian')}m</span>
                     <input
                         id={`swal-alrihan`}
                         className="p-2 w-[15rem] text-[#EBEBE4] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
                 </div>
                 <div className="flex items-center mt-1">
-                    <span className="text-[#EBEBE4] w-[7rem]">{t('latvian')}:</span>
+                    <span className="text-[#EBEBE4] w-[7rem]">{t('latvian')}</span>
                     <input
                         id={`swal-latvian`}
                         className="p-2 w-[15rem] text-[#EBEBE4] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
                 </div>
                 <div className="flex items-center mt-1">
-                    <span className="w-[7rem] text-[#EBEBE4]">{t('description')}:</span>
+                    <span className="w-[7rem] text-[#EBEBE4]">{t('description')}</span>
                     <textarea
                         id={`swal-description`}
                         className="p-2 text-[#EBEBE4] max-w-[30vw] md:max-w-[45vw] sm:max-w-[90vw] resize h-[4rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300"
                     />
                 </div>
                 <div className="flex items-center">
-                    <span className="w-[7rem] text-[#EBEBE4]">{t('speech')}:</span>
+                    <span className="w-[7rem] text-[#EBEBE4]">{t('speech')}</span>
                     <select
                         id={`swal-speech`}
 
@@ -243,6 +243,24 @@ export default function Main() {
         })
 
     }
+
+    const fetchWords = (filters: WordFilter, setData: (...args: any) => void) => {
+        console.log("fetch: ", filters.page)
+        fetch(config.proxy + `/api/word`, {
+            method: "NEWGET",
+            credentials: "include",
+            body: JSON.stringify(filters),
+            // headers: {
+            //     'Content-Type': 'application/json',
+            // }
+        }).then((dat) => dat.json()).then((data => {
+            if (data.data.length === 0) {
+                return
+            }
+
+            setData(data)
+        })).catch(err => console.error)
+    }
     return (
         <>
             <div className={" sticky top-0"}>
@@ -284,15 +302,15 @@ export default function Main() {
                                 </summary>
                                 {/*<div id={word.id} className="flex flex-col border-2 rounded-lg m-3 p-2 text-white">*/}
                                     <div className="flex items-center mt-1">
-                                        <span className="w-[7rem]">{t('alrihian')}:</span>
+                                        <span className="w-[7rem]">{t('alrihian')}</span>
                                         <input disabled={!logged} defaultValue={word.alrihian} id={`${word.id}-alrihian`} className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="w-[7rem]">{t('latvian')}:</span>
+                                        <span className="w-[7rem]">{t('latvian')}</span>
                                         <input disabled={!logged} defaultValue={word.latvian} id={`${word.id}-latvian`} className="p-2 w-[15rem] bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300" />
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="w-[7rem]">{t('description')}:</span>
+                                        <span className="w-[7rem]">{t('description')}</span>
                                         <textarea
                                             disabled={!logged}
                                             defaultValue={word.description}
@@ -302,7 +320,7 @@ export default function Main() {
                                         />
                                     </div>
                                     <div className="flex items-center">
-                                        <span className="w-[7rem]">{t('speech')}:</span>
+                                        <span className="w-[7rem]">{t('speech')}</span>
                                         <select
                                             disabled={!logged}
                                             defaultValue={word.partofspeech} id={`${word.id}-speech`} className="p-2 bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-300">
@@ -341,23 +359,6 @@ export default function Main() {
             </div>
         </>
     )
-}
-const fetchWords = (filters: WordFilter, setData: (...args: any) => void) => {
-    console.log("fetch: ", filters.page)
-    fetch(`${config.proxy}/api/word`, {
-        method: "NEWGET",
-        credentials: "include",
-        body: JSON.stringify(filters),
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }).then((dat) => dat.json()).then((data => {
-        if (data.data.length === 0) {
-            return
-        }
-
-        setData(data)
-    })).catch(err => console.error)
 }
 function FilterToQuery() {
 
