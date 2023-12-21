@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"main/functions"
@@ -33,7 +34,9 @@ func Login(c *gin.Context) {
 		c.JSON(400, functions.Error(err.Error()))
 		return
 	}
+	fmt.Println(acc)
 	strRand := functions.RandStringRunes(64)
+	acc.Password = ""
 	structs.AccountData[strRand] = *acc
 	session.Set("user", strRand)
 	if err := session.Save(); err != nil {

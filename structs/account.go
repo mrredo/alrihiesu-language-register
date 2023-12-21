@@ -53,6 +53,31 @@ Session data for backend
 */
 var AccountData = map[string]Account{}
 
+func GetAccount(filter interface{}) ([]Account, error) {
+	col := config.AccountDB.Collection(config.AccountData)
+	cur, err := col.Find(context.Background(), filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cur.Close(context.Background())
+
+	var accounts []Account
+	for cur.Next(context.Background()) {
+		var account Account
+		if err := cur.Decode(&account); err != nil {
+			return nil, err
+		}
+		account.RemovePasswordField()
+		accounts = append(accounts, account)
+	}
+
+	if err := cur.Err(); err != nil {
+		return nil, err
+	}
+
+	return accounts, nil
+}
+
 // RetrieveAccountData
 /*
 public data function

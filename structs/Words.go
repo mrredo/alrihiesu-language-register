@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"main/config"
 	"reflect"
 	"strings"
+	"time"
 )
 
 type Word struct {
@@ -19,13 +21,13 @@ type Word struct {
 	PartOfSpeech PartOfSpeech `json:"partofspeech,omitempty"` // The part of speech of the word (e.g., noun, verb, adjective)
 	Examples     []string     `json:"examples,omitempty"`     // Example sentences using the word
 	Author       Author       `json:"author"`
-	Contributors []Author     `json:"contributors"`
+	//Contributors []Author     `json:"contributors"`
 }
 type PartOfSpeech string
 
 type Author struct {
-	ID         Snowflake
-	ModifiedAt int64
+	ID         Snowflake `json:"id,omitempty"`
+	ModifiedAt int64     `json:"modifiedat,omitempty"`
 }
 
 const (
@@ -37,6 +39,10 @@ const (
 	Conjunction PartOfSpeech = "conjunction" // Latvian: "Savienojuma vārds"
 	Preposition PartOfSpeech = "preposition" // Latvian: "Prievārds"
 	Other       PartOfSpeech = "other"       // Latvian: "Cits"
+)
+
+var (
+// ErrAccount
 )
 
 func WordExists(id Snowflake) bool {
@@ -72,12 +78,16 @@ func RemoveWord(id Snowflake) error {
 	}
 	return nil
 }
-func NewWord(word *Word) (*Word, error) {
+func NewWord(word *Word, user Account) (*Word, error) {
 	id, err := GenerateId(config.WordNode)
 	if err != nil {
 		return nil, err
 	}
 	word.ID = id
+	word.Author = Author{
+		ID:         user.ID,
+		ModifiedAt: time.Now().Unix(),
+	}
 	col := config.WordDB.Collection(config.WordData)
 	_, err = col.InsertOne(context.TODO(), *word, options.InsertOne())
 	if err != nil {
@@ -85,13 +95,20 @@ func NewWord(word *Word) (*Word, error) {
 	}
 	return word, nil
 }
+
+var excludedFields = map[string]struct{}{
+	"ID":           {},
+	"contributors": {},
+	"author":       {},
+}
+
 func (w *Word) RequiredFields() (emptyFields []string) {
 	val := reflect.ValueOf(*w)
 
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
 		fieldName := val.Type().Field(i).Name
-		if fieldName == "ID" {
+		if _, ok := excludedFields[fieldName]; ok {
 			continue
 		}
 		switch field.Kind() {
@@ -111,11 +128,33 @@ func (w *Word) AddExample(example string) {
 	w.Examples = append(w.Examples, example)
 }
 
-func (w *Word) Update() error {
-
-	_, err := config.WordDB.Collection(config.WordData).UpdateOne(context.TODO(), bson.M{
+func (w *Word) Update(sessionKey string) error {
+	col := config.WordDB.Collection(config.WordData)
+	res := col.FindOne(context.Background(), bson.M{
 		"id": w.ID,
-	}, bson.M{"$set": w.ToMap()})
+	})
+	NewWordT := &Word{}
+	if err := res.Decode(&NewWordT); err != nil {
+		return err
+	}
+	if NewWordT.Author.ID == "" {
+		data, ok := AccountData[sessionKey]
+		if !ok {
+			return ErrUserNotFound
+		}
+		//newAcc := &Account{ID: data.ID}
+		//newAcc.Fetch()
+		w.Author = Author{
+			ID:         data.ID,
+			ModifiedAt: time.Now().Unix(),
+		}
+	} else {
+		w.Author = NewWordT.Author
+	}
+	fmt.Println(w.Author)
+	_, err := col.UpdateOne(context.Background(), bson.M{
+		"id": w.ID,
+	}, bson.M{"$set": w})
 	return err
 }
 func (w *Word) ToMap() map[string]interface{} {

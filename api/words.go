@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"main/structs"
 	"strings"
@@ -47,7 +48,9 @@ func MakeNewWord(c *gin.Context) {
 		c.JSON(400, Error(err.Error()))
 		return
 	}
-	word, err := structs.NewWord(word)
+	session := sessions.Default(c)
+	data := session.Get("user").(string)
+	word, err := structs.NewWord(word, structs.AccountData[data])
 	if err != nil {
 		c.JSON(400, Error(err.Error()))
 		return
@@ -82,7 +85,7 @@ func UpdateWord(c *gin.Context) {
 		return
 	}
 
-	if err := word.Update(); err != nil {
+	if err := word.Update(sessions.Default(c).Get("user").(string)); err != nil {
 		c.JSON(400, Error(err.Error()))
 		return
 	}

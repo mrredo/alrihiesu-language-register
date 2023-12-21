@@ -21,7 +21,12 @@ interface Word {
     latvian: string,
     description: string,
     partofspeech: string,
+    author?: Author,
     examples: string[]
+}
+interface Author {
+    id: string
+    modifiedat: bigint
 }
 const options1 = ["noun", "verb", "adjective", "adverb", "pronoun", "conjunction", "preposition", "other"]
 
@@ -33,5 +38,6 @@ export {
     WordFilter,
     WordMetaData,
     WordMap,
-    options1
+    options1,
+    Author
 }

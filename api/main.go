@@ -38,7 +38,7 @@ func RegisterEndpoints() {
 			"https://alrihiesu-language-register-1.mrredogaming.repl.co/",
 			"https://alrihiesu-language-register-1.mrredogaming.repl.co",
 		},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "NEWGET"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "NEWGET", "NEW"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Accept", "Cookie", "Set-Cookie"},
 		AllowCredentials: true,
 	}))
@@ -46,9 +46,11 @@ func RegisterEndpoints() {
 	r.Use(sessions.Sessions("user", store))
 
 	api := r.Group("/api/")
+	acc := r.Group("/acc/")
 	authGr := r.Group("/auth/")
 	api.Use(func(c *gin.Context) {
 		session := sessions.Default(c)
+
 		if session.Get("user") == nil && (c.Request.Method != "GET" && c.Request.Method != "NEWGET") {
 			c.JSON(401, functions.Error("not_authenticated"))
 			c.Abort()
@@ -78,6 +80,8 @@ func RegisterEndpoints() {
 	api.PATCH("/word", UpdateWord)
 
 	// - ACCOUNT
-	api.GET("/account", accounts.GetAccount)
+	acc.GET("/account", accounts.GetAccountV2)
+	acc.Handle("NEW", "/account", accounts.GetAccountV2)
+
 	api.POST("/account", accounts.CreateAccount)
 }

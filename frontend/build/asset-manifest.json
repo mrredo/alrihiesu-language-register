@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.be6b9c71.css",
+    "main.js": "/static/js/main.09eabd68.js",
+    "static/media/ainava.png": "/static/media/ainava.5c0fcbd0972e86213abe.png",
+    "static/media/redobot.png": "/static/media/redobot.ecdc5b0d5a5ecd50d3c7.png",
+    "index.html": "/index.html",
+    "main.be6b9c71.css.map": "/static/css/main.be6b9c71.css.map",
+    "main.09eabd68.js.map": "/static/js/main.09eabd68.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.be6b9c71.css",
+    "static/js/main.09eabd68.js"
+  ]
+}
