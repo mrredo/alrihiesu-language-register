@@ -48,6 +48,7 @@ func RegisterEndpoints() {
 	api := r.Group("/api/")
 	acc := r.Group("/acc/")
 	authGr := r.Group("/auth/")
+
 	api.Use(func(c *gin.Context) {
 		session := sessions.Default(c)
 
@@ -82,6 +83,6 @@ func RegisterEndpoints() {
 	// - ACCOUNT
 	acc.GET("/account", accounts.GetAccountV2)
 	acc.Handle("NEW", "/account", accounts.GetAccountV2)
+	acc.POST("/account", accounts.CreateAccount)
 
-	api.POST("/account", accounts.CreateAccount)
 }

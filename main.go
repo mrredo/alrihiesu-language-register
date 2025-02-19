@@ -49,5 +49,5 @@ func main() {
 	config.GramDB = client.Database("grammatical")
 	api.RegisterEndpoints()
 
-	r.Run(":4020")
+	r.Run(":" + os.Getenv("PORT"))
 }
