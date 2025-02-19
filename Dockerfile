@@ -24,6 +24,9 @@ WORKDIR /frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm install
 
+# Install sass (if needed, in case it's missing)
+RUN npm install sass
+
 # Copy the rest of the React source code
 COPY frontend ./
 
@@ -43,7 +46,7 @@ COPY --from=build /app/main .
 COPY --from=frontend-build /frontend/build ./frontend
 
 # Copy .env file (optional, better to use --env-file)
-                                                                                                                                    COPY .env /app/.env
+COPY .env /app/.env
 
 # Set environment variables
 ENV PORT=8080
@@ -58,7 +61,7 @@ CMD ["sh", "-c", "./main"]
 
 # How to Build and Run
 # Build the Docker image
-#docker build -t my-golang-app .
+# docker build -t alrihiesu-language-register .
 
 # Run the container with the .env file
-#docker run --env-file .env -p 8080:8080 my-golang-app
+# docker run --env-file .env -p 8080:8080 alrihiesu-language-register
