@@ -39,7 +39,7 @@ COPY --from=frontend-build /frontend/build ./frontend
 COPY .env /app/.env
 
 # Set environment variables
-ENV PORT=8080
+ENV PORT=312
 
 # Expose the port
 EXPOSE $PORT
