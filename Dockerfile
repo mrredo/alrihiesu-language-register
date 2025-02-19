@@ -14,7 +14,7 @@ COPY . .
 # Build the Go application
 RUN go build -o main .
 
-# ===== Stage 2: Build the React Frontend =====
+# ===== Stage 2: Build the React Frontend (only if not built) =====
 FROM node:18 AS frontend-build
 
 # Set working directory for React
@@ -24,14 +24,8 @@ WORKDIR /frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm install
 
-# Install sass (if needed, in case it's missing)
-RUN npm install sass
-
-# Copy the rest of the React source code
-COPY frontend ./
-
-# Build the React app for production
-RUN npm run build
+# Check if the build folder exists. If it doesn't, run npm run build.
+RUN if [ ! -d "/frontend/build" ]; then npm run build; else echo "Frontend build exists, skipping..."; fi
 
 # ===== Stage 3: Final Container with Backend + Frontend =====
 FROM ubuntu:latest
@@ -56,6 +50,7 @@ EXPOSE $PORT
 
 # Run the Go application
 CMD ["sh", "-c", "./main"]
+
 
 
 
