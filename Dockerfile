@@ -1,41 +1,41 @@
-# ===== Stage 1: Build the Go Backend =====
+# ===== Stage 1: Build Backend =====
 FROM golang:1.21 AS build
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy Go module files and download dependencies
+# Copy and download Go dependencies
 COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the rest of the application code
 COPY . .
-
-# Build the Go application
 RUN go build -o main .
 
-# ===== Stage 2: Copy the React Frontend (Already Built) =====
-FROM node:18 AS frontend-build
+# ===== Stage 2: Build Frontend =====
+FROM node:20 AS frontend-build
 
-# Set working directory for React
-WORKDIR /frontend
-
-# Copy only the built React files (from your local "frontend/build")
-COPY frontend/build /frontend/build
+WORKDIR /app/frontend
+COPY ./frontend ./
+RUN npm install && npm run build
 
 # ===== Stage 3: Final Container with Backend + Frontend =====
 FROM ubuntu:latest
 
-# Set working directory
 WORKDIR /app
 
-# Copy the compiled Go backend binary
+# Install necessary dependencies
+RUN apt update && apt install -y ca-certificates
+
+# Copy compiled Go backend
 COPY --from=build /app/main .
 
-# Copy the already built React frontend files
-COPY --from=frontend-build /frontend/build ./frontend
+# Copy built frontend files
+COPY --from=frontend-build /app/frontend/build /app/frontend/build
 
-# Copy .env file (optional, better to use --env-file)
+# Debugging: Check if frontend files exist
+RUN ls -l /app/frontend/build || true
+
+# Copy .env file
 COPY .env /app/.env
 
 # Set environment variables
@@ -46,13 +46,3 @@ EXPOSE $PORT
 
 # Run the Go application
 CMD ["sh", "-c", "./main"]
-
-
-
-
-# How to Build and Run
-# Build the Docker image
-# docker build -t alrihiesu-language-register .
-
-# Run the container with the .env file
-# docker run --env-file .env -p 8080:8080 alrihiesu-language-register
